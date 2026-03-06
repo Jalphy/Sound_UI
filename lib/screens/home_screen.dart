@@ -37,13 +37,22 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
 
   void _onEvent(SoundEvent event) {
     if (!mounted) return;
+
+    // Indoor mode: only safety alarms are relevant inside a building
+    final bool shouldAlert = _isNormalMode
+        ? event.isDangerous
+        : event.isDangerous && event.soundClass == SoundClass.safetyAlarm;
+
     setState(() {
       _currentDb = event.decibels;
-      _recentEvents.insert(0, event);
-      if (_recentEvents.length > 5) _recentEvents.removeLast();
+      // Only log events relevant to current mode
+      if (_isNormalMode || event.soundClass == SoundClass.safetyAlarm) {
+        _recentEvents.insert(0, event);
+        if (_recentEvents.length > 5) _recentEvents.removeLast();
+      }
     });
 
-    if (event.isDangerous) {
+    if (shouldAlert) {
       Navigator.of(context).push(
         PageRouteBuilder(
           pageBuilder: (_, __, ___) => AlertScreen(event: event),

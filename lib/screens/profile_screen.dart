@@ -307,7 +307,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                   const SizedBox(width: 8),
                   Expanded(
                     child: Text(
-                      'They\'ll receive an SMS/notification if you don\'t dismiss an alert within ${widget.appState.alertDismissTimeout}s',
+                      'They\'ll receive an SMS/notification if you don\'t dismiss an alert within 45s',
                       style: const TextStyle(
                           color: Color(0xFFFF6B00),
                           fontSize: 12,
